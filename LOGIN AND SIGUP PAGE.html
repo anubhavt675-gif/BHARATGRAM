@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BharatGram Authentication page</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* ===============================
+   GLOBAL RESET
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ===============================
+   BODY
+================================ */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url("darkmode.jpg.jpeg") no-repeat center / cover;
+  transition: 0.6s ease;
+}
+
+/* dark Mode Body */
+body.dark {
+  background: url("lightmode.jpg.jpeg") no-repeat center / cover;
+}
+
+/* ===============================
+   CARD CONTAINER
+================================ */
+.card {
+  width: 400px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  transition: 0.6s ease;
+}
+
+/* Dark Mode Card */
+body.dark .card {
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+}
+
+/* ===============================
+   LOGO SECTION
+================================ */
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo h2 {
+  font-size: 28px;
+  color: #ff7a18;
+}
+
+.logo p {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* ===============================
+   INPUT FIELDS
+================================ */
+.input-box {
+  position: relative;
+  margin: 12px 0;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 14px 45px;
+  border: none;
+  outline: none;
+  border-radius: 30px;
+  background: #f2f2f2;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-box input:focus {
+  background: #e8e8e8;
+  box-shadow: 0 0 0 2px rgba(255, 122, 24, 0.3);
+}
+
+/* Dark Mode Input */
+body.dark .input-box input {
+  background: #222;
+  color: #ffffff;
+}
+
+body.dark .input-box input:focus {
+  background: #333;
+  box-shadow: 0 0 0 2px rgba(30, 255, 0, 0.3);
+}
+
+/* Error state for input - ONLY WHEN USER HAS INTERACTED */
+.input-box input.error {
+  box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.3);
+  background: #ffeaea;
+}
+
+body.dark .input-box input.error {
+  box-shadow: 0 0 0 2px rgba(255, 50, 50, 0.5);
+  background: #330000;
+}
+
+.input-box span {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* ===============================
+   AGE INPUT
+================================ */
+.age-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.age-input {
+  width: 100px !important;
+  padding: 14px 20px !important;
+  text-align: center;
+}
+
+/* ===============================
+   GENDER SELECTION
+================================ */
+.gender-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.gender-option {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #f2f2f2;
+  border-radius: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.gender-option:hover {
+  background: #f0f0f0;
+  border-color: #ff7a18;
+}
+
+.gender-option.selected {
+  background: #ff7a18;
+  color: white;
+  border-color: #ff7a18;
+}
+
+/* Error state for gender - ONLY WHEN USER HAS INTERACTED */
+.gender-option.error-gender {
+  border-color: #ff4444;
+  background: #ffeaea;
+}
+
+body.dark .gender-option.error-gender {
+  border-color: #ff6666;
+  background: #330000;
+}
+
+body.dark .gender-option {
+  background: #222;
+  border-color: #333;
+  color: #ddd;
+}
+
+body.dark .gender-option:hover {
+  background: #333;
+  border-color: #1eff00;
+}
+
+body.dark .gender-option.selected {
+  background: #1eff00;
+  color: #000;
+  border-color: #1eff00;
+}
+
+/* ===============================
+   FIELD TITLE
+================================ */
+.field-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+body.dark .field-title {
+  color: #ddd;
+}
+
+/* ===============================
+   ERROR MESSAGE
+================================ */
+.error-message {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 3px;
+  margin-left: 15px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.error-message.show {
+  display: block;
+  opacity: 1;
+}
+
+body.dark .error-message {
+  color: #ff6666;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+.btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 14px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(90deg, #ff7a18, #ffb347);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Disabled button */
+.btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none !important;
+}
+
+body.dark .btn:disabled {
+  background: #444;
+  color: #888;
+}
+
+/* Enabled button hover effect */
+.btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 122, 24, 0.4);
+}
+
+body.dark .btn:not(:disabled):hover {
+  box-shadow: 0 5px 15px rgba(30, 255, 0, 0.4);
+}
+
+/* Dark Mode Button Animation */
+body.dark .btn:not(:disabled) {
+  background: linear-gradient(120deg, #1eff00, #0a7a00, #1eff00);
+  background-size: 200%;
+  animation: glow 3s linear infinite;
+}
+
+/* Glow Animation */
+@keyframes glow {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+/* ===============================
+   TEXT & LINKS
+================================ */
+.text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.text span {
+  color: #ff7a18;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.text span:hover {
+  color: #ff5c00;
+}
+
+body.dark .text span {
+  color: #1eff00;
+}
+
+body.dark .text span:hover {
+  color: #00ff00;
+}
+
+/* ===============================
+   DARK MODE TOGGLE
+================================ */
+.toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #ffffff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.toggle:hover {
+  transform: scale(1.05);
+}
+
+/* Dark Mode Toggle */
+body.dark .toggle {
+  background: #000000;
+  color: #ffffff;
+  border-color: #1eff00;
+}
+
+/* ===============================
+   UTILITY
+================================ */
+.hidden {
+  display: none;
+}
+
+/* ===============================
+   LOADING ANIMATION
+================================ */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-logo {
+    width: 140px;
+    margin-bottom: 30px;
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+    0%, 100% { 
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(255, 122, 24, 0.5));
+    }
+    50% { 
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(30, 255, 0, 0.7));
+    }
+}
+
+.loading-title {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 40px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.loading-percentage {
+    color: #ff7a18;
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 15px rgba(255, 122, 24, 0.5);
+}
+
+/* Progress Bar Container */
+.progress-container {
+    width: 350px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff7a18, #1eff00);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Loading Dots */
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff7a18;
+    animation: dotBounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes dotBounce {
+    0%, 80%, 100% { 
+        transform: scale(0);
+        background: #ff7a18;
+    }
+    40% { 
+        transform: scale(1);
+        background: #1eff00;
+    }
+}
+
+.loading-status {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-top: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Loading Steps */
+.loading-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.step {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s ease;
+}
+
+.step.completed {
+    color: #1eff00;
+}
+
+.step.current {
+    color: #ff7a18;
+    font-weight: bold;
+}
+
+.step-icon {
+    font-size: 14px;
+}
+
+/* ===============================
+   SUCCESS MESSAGE
+================================ */
+.success-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    min-width: 300px;
+    box-shadow: 0 0 30px rgba(30, 255, 0, 0.3);
+    border: 2px solid #1eff00;
+}
+
+.success-icon {
+    font-size: 50px;
+    color: #1eff00;
+    animation: successPulse 1s infinite;
+}
+
+@keyframes successPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ===============================
+   PAGE TRANSITION
+================================ */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    pointer-events: none;
+    background: #0a0a0a;
+    transform: translateX(100%);
+}
+
+.transition-active {
+    animation: slideIn 0.5s ease forwards;
+}
+
+.transition-out {
+    animation: slideOut 0.5s ease forwards;
+}
+
+@keyframes slideIn {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-content">
+        <img src="logo.jpeg" class="loading-logo" alt="BharatGram">
+        <div class="loading-title">LOADING AUTHENTICATION</div>
+        
+        <div class="loading-percentage" id="loadingPercent">0%</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        
+        <div class="loading-status" id="loadingStatus">Initializing Login System</div>
+        
+        <div class="loading-steps">
+            <div class="step" id="step1">
+                <span class="step-icon">◉</span>
+                <span>Loading Security Modules</span>
+            </div>
+            <div class="step" id="step2">
+                <span class="step-icon">◉</span>
+                <span>Preparing Login Form</span>
+            </div>
+            <div class="step" id="step3">
+                <span class="step-icon">◉</span>
+                <span>Establishing Connection</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">
+    <div class="success-icon">✓</div>
+    <div style="font-size: 24px; font-weight: bold; color: #1eff00;">Signup Successful!</div>
+    <div>Your account has been created successfully</div>
+    <div style="font-size: 12px; opacity: 0.7;">Redirecting to terms page...</div>
+</div>
+
+<!-- Page Transition -->
+<div class="page-transition" id="pageTransition"></div>
+
+<!-- Main Content -->
+<div class="toggle" onclick="toggleMode()">🌙 Dark</div>
+
+<div class="card">
+    <!-- Login Form -->
+    <div id="login">
+        <div class="logo">
+            <h2>BharatGram</h2>
+            <p>Connect with Bharat</p>
+        </div>
+        <div class="input-box">
+            <span>📧</span>
+            <input type="text" placeholder="Email or Phone" id="loginUser">
+            <div class="error-message" id="loginUserError"></div>
+        </div>
+        <div class="input-box">
+            <span>🔒</span>
+            <input type="password" placeholder="Password" id="loginPassword">
+            <div class="error-message" id="loginPasswordError"></div>
+        </div>
+        <button class="btn" onclick="handleLogin()">Log in</button>
+        <div class="text">
+            Don't have an account? <span onclick="showSignup()">Sign up</span>
+        </div>
+    </div>
+
+    <!-- Signup Form -->
+    <div id="signup" class="hidden">
+        <div class="logo">
+            <h2>Sign up</h2>
+            <p>Create your account</p>
+        </div>
+        
+        <!-- Full Name -->
+        <div class="input-box">
+            <span>👤</span>
+            <input type="text" placeholder="Full Name" id="signupName">
+            <div class="error-message" id="nameError">Please enter your full name</div>
+        </div>
+        
+        <!-- Username -->
+        <div class="input-box">
+            <span>@</span>
+            <input type="text" placeholder="Username" id="signupUsername">
+            <div class="error-message" id="usernameError">Please choose a username</div>
+        </div>
+        
+        <!-- Email -->
+        <div class="input-box">
+            <span>📧</span>
+            <input type="email" placeholder="Email" id="signupEmail">
+            <div class="error-message" id="emailError">Please enter a valid email</div>
+        </div>
+        
+        <!-- Password -->
+        <div class="input-box">
+            <span>🔒</span>
+            <input type="password" placeholder="Password" id="signupPassword">
+            <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
+        </div>
+        
+        <!-- Age -->
+        <div class="field-title">
+            <span>🎂</span>
+            <span>Age</span>
+        </div>
+        <div class="input-box">
+            <div class="age-input-container">
+                <input type="number" min="13" max="100" placeholder="Enter your age" id="signupAge" class="age-input">
+            </div>
+            <div class="error-message" id="ageError">Age must be between 13 and 100</div>
+        </div>
+        
+        <!-- Gender -->
+        <div class="field-title">
+            <span>👤</span>
+            <span>Gender</span>
+        </div>
+        <div class="gender-container">
+            <div class="gender-option" data-value="male" onclick="selectGender(this)">Male</div>
+            <div class="gender-option" data-value="female" onclick="selectGender(this)">Female</div>
+            <div class="gender-option" data-value="other" onclick="selectGender(this)">Other</div>
+        </div>
+        <div class="error-message" id="genderError">Please select your gender</div>
+        
+        <!-- Signup Button -->
+        <button class="btn" id="signupBtn" onclick="handleSignup()" disabled>Sign up</button>
+        
+        <!-- Login Link -->
+        <div class="text">
+            Already have an account? <span onclick="showLogin()">Log in</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// Loading functionality for index.html
+let progress = 0;
+const loadingPercent = document.getElementById('loadingPercent');
+const progressBar = document.getElementById('progressBar');
+const loadingStatus = document.getElementById('loadingStatus');
+const loadingScreen = document.getElementById('loadingScreen');
+const steps = ['step1', 'step2', 'step3'];
+const successMessage = document.getElementById('successMessage');
+
+// Loading status messages for login page
+const statusMessages = [
+    "Initializing Login System...",
+    "Loading Security Modules...",
+    "Preparing Authentication...",
+    "Setting Up Form Fields...",
+    "Establishing Secure Connection...",
+    "Finalizing Setup...",
+    "Ready to Login..."
+];
+
+// Form validation variables
+let signupFormValid = false;
+let selectedGender = null;
+let hasInteracted = {
+    signupName: false,
+    signupUsername: false,
+    signupEmail: false,
+    signupPassword: false,
+    signupAge: false,
+    gender: false
+};
+
+const signupFields = ['signupName', 'signupUsername', 'signupEmail', 'signupPassword', 'signupAge'];
+const signupBtn = document.getElementById('signupBtn');
+
+// Simulate loading progress
+function simulateLoading() {
+    let currentStep = 0;
+    let statusIndex = 0;
+    
+    const interval = setInterval(() => {
+        // Increase progress
+        progress += Math.random() * 3 + 1; // Between 1-4%
+        
+        if (progress > 100) {
+            progress = 100;
+            clearInterval(interval);
+            
+            // Update final values
+            loadingPercent.textContent = '100%';
+            progressBar.style.width = '100%';
+            loadingStatus.textContent = 'Ready!';
+            
+            // Mark all steps as completed
+            steps.forEach(step => {
+                document.getElementById(step).classList.add('completed');
+            });
+            
+            // Hide loading screen with fade out
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 500);
+            
+        } else {
+            // Update progress bar and percentage
+            loadingPercent.textContent = Math.floor(progress) + '%';
+            progressBar.style.width = progress + '%';
+            
+            // Update loading status every 15%
+            if (progress % 15 < 1 && statusIndex < statusMessages.length - 1) {
+                statusIndex++;
+                loadingStatus.textContent = statusMessages[statusIndex];
+            }
+            
+            // Update steps based on progress
+            if (progress > 25 && currentStep === 0) {
+                document.getElementById(steps[0]).classList.add('completed');
+                document.getElementById(steps[1]).classList.add('current');
+                currentStep = 1;
+            }
+            if (progress > 55 && currentStep === 1) {
+                document.getElementById(steps[1]).classList.remove('current');
+                document.getElementById(steps[1]).classList.add('completed');
+                document.getElementById(steps[2]).classList.add('current');
+                currentStep = 2;
+            }
+            if (progress > 85 && currentStep === 2) {
+                document.getElementById(steps[2]).classList.remove('current');
+                document.getElementById(steps[2]).classList.add('completed');
+                currentStep = 3;
+            }
+        }
+    }, 80);
+}
+
+// Handle page load
+window.addEventListener('load', function() {
+    // Remove any incoming transition
+    if (localStorage.getItem("comingFromTransition") === "true") {
+        const transition = document.getElementById('pageTransition');
+        if (transition) {
+            transition.classList.add('transition-out');
+            setTimeout(() => {
+                transition.remove();
+                localStorage.removeItem("comingFromTransition");
+            }, 500);
+        }
+    }
+    
+    // Start loading simulation
+    simulateLoading();
+    
+    // Add event listeners for signup form validation
+    setupSignupValidation();
+    
+    // Optional: Add click to skip functionality
+    loadingScreen.addEventListener('click', () => {
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 300);
+    });
+});
+
+// Setup signup form validation
+function setupSignupValidation() {
+    signupFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('focus', function() {
+                hasInteracted[fieldId] = true;
+            });
+            
+            field.addEventListener('input', function() {
+                hasInteracted[fieldId] = true;
+                validateSignupForm();
+            });
+            
+            field.addEventListener('blur', function() {
+                hasInteracted[fieldId] = true;
+                validateSignupForm();
+            });
+        }
+    });
+}
+
+// Gender selection function
+function selectGender(element) {
+    // Mark gender as interacted
+    hasInteracted.gender = true;
+    
+    // Remove selected class from all gender options
+    document.querySelectorAll('.gender-option').forEach(opt => {
+        opt.classList.remove('selected');
+        opt.classList.remove('error-gender');
+    });
+    
+    // Add selected class to clicked option
+    element.classList.add('selected');
+    selectedGender = element.getAttribute('data-value');
+    
+    // Clear gender error
+    const genderError = document.getElementById('genderError');
+    genderError.classList.remove('show');
+    
+    // Validate form
+    validateSignupForm();
+}
+
+// Validate signup form - SHOW ERRORS ONLY AFTER USER INTERACTION
+function validateSignupForm() {
+    let allValid = true;
+    
+    // Check each field
+    const name = document.getElementById('signupName').value.trim();
+    const username = document.getElementById('signupUsername').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+    const age = document.getElementById('signupAge').value.trim();
+    
+    // Name validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    if (hasInteracted.signupName) {
+        if (name.length < 2) {
+            showError('signupName', 'nameError', 'Please enter your full name (min 2 characters)');
+            allValid = false;
+        } else {
+            hideError('signupName', 'nameError');
+        }
+    }
+    
+    // Username validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    if (hasInteracted.signupUsername) {
+        if (username.length < 3) {
+            showError('signupUsername', 'usernameError', 'Username must be at least 3 characters');
+            allValid = false;
+        } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            showError('signupUsername', 'usernameError', 'Username can only contain letters, numbers, and underscores');
+            allValid = false;
+        } else {
+            hideError('signupUsername', 'usernameError');
+        }
+    }
+    
+    // Email validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    if (hasInteracted.signupEmail) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('signupEmail', 'emailError', 'Please enter a valid email address');
+            allValid = false;
+        } else {
+            hideError('signupEmail', 'emailError');
+        }
+    }
+    
+    // Password validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    if (hasInteracted.signupPassword) {
+        if (password.length < 6) {
+            showError('signupPassword', 'passwordError', 'Password must be at least 6 characters');
+            allValid = false;
+        } else {
+            hideError('signupPassword', 'passwordError');
+        }
+    }
+    
+    // Age validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    if (hasInteracted.signupAge) {
+        const ageNum = parseInt(age);
+        if (!age || isNaN(ageNum) || ageNum < 13 || ageNum > 100) {
+            showError('signupAge', 'ageError', 'Age must be between 13 and 100');
+            allValid = false;
+        } else {
+            hideError('signupAge', 'ageError');
+        }
+    }
+    
+    // Gender validation - ONLY SHOW ERROR IF USER HAS INTERACTED
+    const genderError = document.getElementById('genderError');
+    if (hasInteracted.gender) {
+        if (!selectedGender) {
+            // Add error style to gender options
+            document.querySelectorAll('.gender-option').forEach(opt => {
+                opt.classList.add('error-gender');
+            });
+            genderError.classList.add('show');
+            allValid = false;
+        } else {
+            document.querySelectorAll('.gender-option').forEach(opt => {
+                opt.classList.remove('error-gender');
+            });
+            genderError.classList.remove('show');
+        }
+    }
+    
+    // Check if ALL fields are filled and valid
+    const allFieldsFilled = name && username && email && password && age && selectedGender;
+    const allFieldsValid = 
+        name.length >= 2 &&
+        username.length >= 3 &&
+        /^[a-zA-Z0-9_]+$/.test(username) &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+        password.length >= 6 &&
+        !isNaN(parseInt(age)) &&
+        parseInt(age) >= 13 &&
+        parseInt(age) <= 100 &&
+        selectedGender;
+    
+    // Update signup button state - enable only when ALL fields are valid
+    signupFormValid = allFieldsFilled && allFieldsValid;
+    signupBtn.disabled = !signupFormValid;
+    
+    return signupFormValid;
+}
+
+// Show error for a field
+function showError(fieldId, errorId, message) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(errorId);
+    
+    field.classList.add('error');
+    errorElement.textContent = message;
+    errorElement.classList.add('show');
+}
+
+// Hide error for a field
+function hideError(fieldId, errorId) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(errorId);
+    
+    field.classList.remove('error');
+    errorElement.classList.remove('show');
+}
+
+// Validate login form
+function validateLoginForm() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    let isValid = true;
+    
+    if (!username) {
+        showError('loginUser', 'loginUserError', 'Please enter email or phone number');
+        isValid = false;
+    } else {
+        hideError('loginUser', 'loginUserError');
+    }
+    
+    if (!password) {
+        showError('loginPassword', 'loginPasswordError', 'Please enter password');
+        isValid = false;
+    } else {
+        hideError('loginPassword', 'loginPasswordError');
+    }
+    
+    return isValid;
+}
+
+function showSignup(){
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("signup").classList.remove("hidden");
+    // Reset all interactions
+    hasInteracted = {
+        signupName: false,
+        signupUsername: false,
+        signupEmail: false,
+        signupPassword: false,
+        signupAge: false,
+        gender: false
+    };
+    // Reset gender selection
+    selectedGender = null;
+    document.querySelectorAll('.gender-option').forEach(opt => {
+        opt.classList.remove('selected');
+        opt.classList.remove('error-gender');
+    });
+    // Clear all errors
+    signupFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.classList.remove('error');
+        }
+    });
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.classList.remove('show');
+    });
+    // Disable signup button initially
+    signupBtn.disabled = true;
+}
+
+function showLogin(){
+    document.getElementById("signup").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
+    // Clear signup form errors
+    signupFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.classList.remove('error');
+        }
+    });
+}
+
+function toggleMode(){
+    document.body.classList.toggle("dark");
+}
+
+// Handle login with validation
+function handleLogin() {
+    if (validateLoginForm()) {
+        // Create transition
+        const transition = document.createElement('div');
+        transition.className = 'page-transition transition-active';
+        document.body.appendChild(transition);
+        
+        // Set flag for next page
+        localStorage.setItem("comingFromTransition", "true");
+        
+        // Add haptic feedback (if supported)
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+        
+        // Redirect after transition
+        setTimeout(() => {
+            window.location.href = "terms.html";
+        }, 500);
+    }
+}
+
+// Handle signup with validation
+function handleSignup() {
+    if (validateSignupForm()) {
+        // Show success message
+        successMessage.style.display = 'flex';
+        
+        // Save user data (in real app, this would go to server)
+        const userData = {
+            name: document.getElementById('signupName').value.trim(),
+            username: document.getElementById('signupUsername').value.trim(),
+            email: document.getElementById('signupEmail').value.trim(),
+            password: document.getElementById('signupPassword').value.trim(),
+            age: document.getElementById('signupAge').value.trim(),
+            gender: selectedGender,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Store in localStorage (for demo purposes only)
+        localStorage.setItem('bharatgram_user', JSON.stringify(userData));
+        
+        // Add haptic feedback (if supported)
+        if (navigator.vibrate) {
+            navigator.vibrate([50, 30, 50]);
+        }
+        
+        // After 2 seconds, show transition and redirect
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+            
+            // Create transition
+            const transition = document.createElement('div');
+            transition.className = 'page-transition transition-active';
+            document.body.appendChild(transition);
+            
+            // Set flag for next page
+            localStorage.setItem("comingFromTransition", "true");
+            
+            // Redirect after transition
+            setTimeout(() => {
+                window.location.href = "terms.html";
+            }, 500);
+        }, 2000);
+    }
+}
+</script>
+</body>
+</html>
