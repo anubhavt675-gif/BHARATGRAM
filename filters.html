@@ -1,0 +1,3501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatGram - Modern Indian Social Media</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Light Mode Colors */
+            --primary-orange: #FF9933;
+            --primary-green: #138808;
+            --white: #FFFFFF;
+            --light-bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-tertiary: #999999;
+            --border-color: #E6E6E6;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --story-male: #138808;
+            --story-female: #FF9933;
+            --close-friend: #0095F6;
+            
+            /* Dark Mode Colors */
+            --dark-bg: #121212;
+            --dark-card: #1E1E1E;
+            --dark-text: #E0E0E0;
+            --dark-border: #333333;
+            --dark-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .dark-mode .app-container {
+            background-color: var(--dark-bg);
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .app-header {
+            background-color: var(--dark-card);
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            background: linear-gradient(to right, var(--primary-orange), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dark-mode .icon-btn {
+            color: var(--dark-text);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #FF4757;
+            color: white;
+            font-size: 10px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            width: 50px;
+            height: 26px;
+            background-color: var(--border-color);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            border: none;
+        }
+
+        .dark-mode .theme-toggle {
+            background-color: #333;
+        }
+
+        .toggle-circle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-orange);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .dark-mode .toggle-circle {
+            transform: translateX(24px);
+            background-color: var(--primary-green);
+        }
+
+        /* Stories Section */
+        .stories-container {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .stories-container {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .stories-title {
+            font-weight: 600;
+            padding: 0 20px 10px;
+            font-size: 14px;
+        }
+
+        .stories-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 0 20px;
+            scrollbar-width: none;
+        }
+
+        .stories-list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .story-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px;
+            margin-bottom: 5px;
+        }
+
+        .story-circle.default {
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-green));
+        }
+
+        .story-circle.male {
+            background: linear-gradient(45deg, var(--story-male), #2ECC71);
+        }
+
+        .story-circle.female {
+            background: linear-gradient(45deg, var(--story-female), #FFB142);
+        }
+
+        .story-circle.close-friend {
+            background: linear-gradient(45deg, var(--close-friend), #4A90E2);
+        }
+
+        .story-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--card-bg);
+        }
+
+        .dark-mode .story-inner {
+            border: 3px solid var(--dark-bg);
+        }
+
+        .story-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-username {
+            font-size: 12px;
+            max-width: 70px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Feed */
+        .feed-container {
+            padding-bottom: 70px;
+        }
+
+        .post-card {
+            margin-bottom: 15px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .post-card {
+            background-color: var(--dark-card);
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-details h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .dark-mode .user-details p {
+            color: #AAAAAA;
+        }
+
+        .follow-btn {
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .follow-btn.following {
+            background-color: var(--primary-green);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .dark-mode .action-btn {
+            color: var(--dark-text);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .action-btn.liked {
+            color: #FF4757;
+        }
+
+        .action-btn.saved {
+            color: var(--primary-green);
+        }
+
+        .post-details {
+            padding: 0 20px 15px;
+        }
+
+        .post-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .like-count {
+            font-weight: 600;
+        }
+
+        .post-caption {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .hashtags {
+            color: var(--primary-orange);
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .dark-mode .post-time {
+            color: #777777;
+        }
+
+        /* Search Bar - Only on Explore Page */
+        .search-container {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .dark-mode .search-container {
+            background-color: var(--dark-card);
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .search-container.active {
+            display: block;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--light-bg);
+            border-radius: 25px;
+            padding: 10px 20px;
+        }
+
+        .dark-mode .search-bar {
+            background-color: #2A2A2A;
+        }
+
+        .search-bar i {
+            color: var(--text-tertiary);
+            margin-right: 10px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: none;
+            width: 100%;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .dark-mode .search-bar input {
+            color: var(--dark-text);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+        }
+
+        .trending-filters {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .trending-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-tag {
+            background-color: var(--light-bg);
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .dark-mode .filter-tag {
+            background-color: #2A2A2A;
+            color: var(--dark-text);
+        }
+
+        .filter-tag.active {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid var(--border-color);
+            z-index: 100;
+        }
+
+        .dark-mode .bottom-nav {
+            background-color: var(--dark-card);
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .dark-mode .nav-item {
+            color: #AAAAAA;
+        }
+
+        .nav-item.active {
+            color: var(--primary-orange);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .add-post-btn {
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-green));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: absolute;
+            top: -25px;
+            box-shadow: 0 4px 12px rgba(255, 153, 51, 0.3);
+            cursor: pointer;
+        }
+
+        /* Explore Grid */
+        .explore-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding-bottom: 70px;
+        }
+
+        .explore-item {
+            aspect-ratio: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .explore-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Profile Page */
+        .profile-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-orange);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-count {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+        }
+
+        .dark-mode .edit-btn {
+            background-color: #2A2A2A;
+            color: var(--dark-text);
+        }
+
+        .share-btn {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+
+        .profile-tabs {
+            display: flex;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .dark-mode .profile-tabs {
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .profile-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .dark-mode .profile-tab {
+            color: #AAAAAA;
+        }
+
+        .profile-tab.active {
+            color: var(--primary-orange);
+            border-bottom: 2px solid var(--primary-orange);
+        }
+
+        .profile-content {
+            padding-bottom: 70px;
+        }
+
+        /* Popular Section */
+        .popular-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .popular-section {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .see-all {
+            color: var(--primary-orange);
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .popular-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+
+        .dark-mode .popular-card {
+            box-shadow: var(--dark-shadow);
+        }
+
+        .popular-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .popular-info {
+            padding: 10px;
+            background-color: var(--card-bg);
+        }
+
+        .dark-mode .popular-info {
+            background-color: var(--dark-card);
+        }
+
+        .popular-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .popular-location {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            background-color: var(--card-bg);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dark-mode .chat-panel {
+            background-color: var(--dark-bg);
+        }
+
+        .chat-panel.active {
+            right: 0;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .chat-header {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .dark-mode .close-chat {
+            color: var(--dark-text);
+        }
+
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .dark-mode .chat-item {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .chat-info {
+            flex: 1;
+        }
+
+        .chat-user {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-green);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border: 2px solid var(--card-bg);
+        }
+
+        .dark-mode .online-indicator {
+            border: 2px solid var(--dark-bg);
+        }
+
+        /* Activity Panel */
+        .activity-panel {
+            padding: 20px;
+            padding-bottom: 70px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dark-mode .activity-item {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .activity-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Reels */
+        .reels-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            padding-bottom: 70px;
+        }
+
+        .reel-card {
+            position: relative;
+            aspect-ratio: 9/16;
+            overflow: hidden;
+        }
+
+        .reel-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .reel-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .reel-username {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Camera and Add Post Overlay */
+        .camera-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .camera-overlay.active {
+            display: flex;
+        }
+
+        .camera-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            color: white;
+            z-index: 2001;
+        }
+
+        .camera-preview {
+            flex: 1;
+            background-color: #333;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #cameraVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1); /* Mirror effect for front camera */
+            filter: none; /* Initial no filter */
+            transition: filter 0.3s ease;
+        }
+
+        #capturedImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            filter: none;
+            transition: filter 0.3s ease;
+        }
+
+        .camera-controls {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            z-index: 2001;
+        }
+
+        .capture-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .capture-btn-inner {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .camera-action-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .camera-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* Camera Filter Buttons */
+        .camera-filter-buttons {
+            position: absolute;
+            bottom: 100px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 2002;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .camera-filter-btn {
+            background: rgba(0,0,0,0.6);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .camera-filter-btn.active {
+            background: var(--primary-orange);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Snapchat Style Filters Overlay */
+        .filters-overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            z-index: 2002;
+            display: none;
+            flex-direction: column;
+            padding: 20px 0 80px 0;
+        }
+
+        .filters-overlay.active {
+            display: flex;
+        }
+
+        .filter-category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 20px 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .filter-category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-category-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-category-btn.active {
+            background: var(--primary-orange);
+        }
+
+        .filters-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .filter-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid transparent;
+            cursor: pointer;
+            position: relative;
+            background: #222;
+        }
+
+        .filter-preview.active {
+            border-color: var(--primary-orange);
+            transform: scale(1.05);
+        }
+
+        .filter-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .filter-name {
+            color: white;
+            font-size: 12px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Story View Overlay */
+        .story-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 2003;
+            display: none;
+            flex-direction: column;
+        }
+
+        .story-viewer.active {
+            display: flex;
+        }
+
+        .story-progress {
+            display: flex;
+            gap: 5px;
+            padding: 20px 20px 10px;
+        }
+
+        .story-progress-bar {
+            flex: 1;
+            height: 3px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .story-progress-fill {
+            height: 100%;
+            background-color: white;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .story-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 10px;
+            color: white;
+        }
+
+        .story-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .story-viewer-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .story-viewer-username {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .story-time {
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .story-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .story-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .story-actions {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .story-reply-input {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .story-reply-input:focus {
+            outline: none;
+        }
+
+        /* Screen Transitions */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* AR Filters Overlay Elements */
+        .ar-filter-element {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+            transition: transform 0.1s;
+        }
+
+        .dog-ears {
+            width: 120px;
+            height: 60px;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dog-nose {
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 30px);
+        }
+
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.8) 2px, transparent 2px),
+                            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.8) 2px, transparent 2px);
+            background-size: 50px 50px;
+            animation: sparkle 2s infinite;
+        }
+
+        .heart-eyes {
+            width: 40px;
+            height: 40px;
+            top: 30%;
+            left: 30%;
+        }
+
+        .heart-eyes.right {
+            left: 70%;
+        }
+
+        .rainbow-vomit {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, 
+                #ff0000 0%, 
+                #ff7700 20%, 
+                #ffff00 40%, 
+                #00ff00 60%, 
+                #0000ff 80%, 
+                #8b00ff 100%);
+            opacity: 0.6;
+            animation: rainbowFlow 3s infinite;
+        }
+
+        .sunglasses {
+            width: 100px;
+            height: 30px;
+            top: 40%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .crown {
+            width: 80px;
+            height: 50px;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mustache {
+            width: 80px;
+            height: 30px;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .indian-flag {
+            width: 60px;
+            height: 40px;
+            top: 20px;
+            right: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .diya {
+            width: 50px;
+            height: 50px;
+            bottom: 50px;
+            left: 20px;
+            animation: flicker 1.5s infinite alternate;
+        }
+
+        /* Filter Effects */
+        .filter-normal {
+            filter: none;
+        }
+
+        .filter-clarendon {
+            filter: contrast(1.2) saturate(1.1) brightness(1.1);
+        }
+
+        .filter-juno {
+            filter: sepia(0.3) contrast(1.1) brightness(1.1) saturate(1.3);
+        }
+
+        .filter-lark {
+            filter: contrast(1.2) saturate(1.1) brightness(1.1) hue-rotate(-5deg);
+        }
+
+        .filter-valencia {
+            filter: sepia(0.3) saturate(1.3);
+        }
+
+        .filter-xpro {
+            filter: contrast(1.2) saturate(1.3) brightness(1.1);
+        }
+
+        .filter-1977 {
+            filter: sepia(0.5) hue-rotate(-30deg) saturate(1.2);
+        }
+
+        .filter-aden {
+            filter: hue-rotate(-20deg) contrast(0.9) brightness(1.1) saturate(1.2);
+        }
+
+        .filter-perpetua {
+            filter: contrast(1.1) brightness(1.1) saturate(1.1);
+        }
+
+        .filter-gingham {
+            filter: contrast(0.9) brightness(1.1) saturate(1.1);
+        }
+
+        .filter-moon {
+            filter: grayscale(1) contrast(1.1) brightness(1.1);
+        }
+
+        .filter-ludwig {
+            filter: sepia(0.3) contrast(1.1) brightness(1.1);
+        }
+
+        .filter-brooklyn {
+            filter: contrast(0.9) brightness(1.1);
+        }
+
+        .filter-slate {
+            filter: sepia(0.4) contrast(1.2) brightness(0.9);
+        }
+
+        /* Snapchat Special Filters */
+        .filter-dog-face {
+            /* Base filter with AR elements */
+        }
+
+        .filter-heart-eyes {
+            filter: brightness(1.1) saturate(1.3);
+        }
+
+        .filter-rainbow {
+            filter: hue-rotate(90deg) saturate(1.5);
+        }
+
+        .filter-vintage {
+            filter: sepia(0.7) contrast(1.1) brightness(0.9);
+        }
+
+        .filter-neon {
+            filter: brightness(1.3) contrast(1.5) saturate(2);
+        }
+
+        .filter-pixelate {
+            filter: blur(0.5px) contrast(1.5);
+        }
+
+        .filter-glitch {
+            animation: glitch 0.5s infinite;
+        }
+
+        .filter-disco {
+            animation: discoLights 2s infinite;
+        }
+
+        .filter-bollywood {
+            filter: brightness(1.2) saturate(1.5) contrast(1.1);
+        }
+
+        .filter-holi {
+            animation: holiColors 3s infinite;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .flash {
+            animation: flash 0.5s ease;
+            background-color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 100%; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes discoLights {
+            0% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(90deg); }
+            50% { filter: hue-rotate(180deg); }
+            75% { filter: hue-rotate(270deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes holiColors {
+            0% { filter: hue-rotate(0deg) saturate(2); }
+            33% { filter: hue-rotate(120deg) saturate(2); }
+            66% { filter: hue-rotate(240deg) saturate(2); }
+            100% { filter: hue-rotate(360deg) saturate(2); }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .app-container {
+                border-radius: 0;
+            }
+            
+            .camera-controls {
+                padding: 30px 20px;
+            }
+            
+            .capture-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .capture-btn-inner {
+                width: 46px;
+                height: 46px;
+            }
+            
+            .camera-filter-buttons {
+                bottom: 90px;
+            }
+            
+            .filter-preview {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">BharatGram</div>
+            <div class="header-actions">
+                <button class="icon-btn" id="notificationBtn">
+                    <i class="far fa-heart"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+                <button class="icon-btn" id="chatBtn">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="toggle-circle"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search Bar (Now only on Explore Page) -->
+        <div class="search-container" id="searchContainer">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search posts, people, hashtags...">
+            </div>
+            <div class="trending-filters">
+                <button class="filter-tag active">All</button>
+                <button class="filter-tag">Travel</button>
+                <button class="filter-tag">Food</button>
+                <button class="filter-tag">Bollywood</button>
+                <button class="filter-tag">Culture</button>
+                <button class="filter-tag">Festivals</button>
+                <button class="filter-tag">Monuments</button>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="screen active" id="homeScreen">
+            <!-- Stories -->
+            <div class="stories-container">
+                <div class="stories-title">Stories</div>
+                <div class="stories-list" id="storiesList">
+                    <!-- Stories will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Popular Section -->
+            <div class="popular-section">
+                <div class="section-header">
+                    <div class="section-title">Popular in India</div>
+                    <a href="#" class="see-all">See all</a>
+                </div>
+                <div class="popular-grid" id="popularGrid">
+                    <!-- Popular items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Feed -->
+            <div class="feed-container" id="feedContainer">
+                <!-- Posts will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Explore Screen -->
+        <div class="screen" id="exploreScreen">
+            <!-- Explore Grid -->
+            <div class="explore-grid" id="exploreGrid">
+                <!-- Explore grid will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Add Post Screen -->
+        <div class="screen" id="addPostScreen">
+            <div style="padding: 40px 20px; text-align: center;">
+                <div style="font-size: 24px; color: var(--primary-orange); margin-bottom: 20px;">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h2 style="margin-bottom: 20px;">Create New Post</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Share your moments with the BharatGram community</p>
+                <div style="border: 2px dashed var(--border-color); border-radius: 15px; padding: 40px; margin-bottom: 20px; cursor: pointer;" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: var(--primary-orange); margin-bottom: 15px;"></i>
+                    <p>Upload photos or videos</p>
+                    <button style="background-color: var(--primary-orange); color: white; border: none; padding: 10px 25px; border-radius: 20px; margin-top: 15px; cursor: pointer;">
+                        Select from gallery
+                    </button>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                    <button style="background-color: var(--light-bg); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">
+                        <i class="fas fa-crop-alt"></i> Crop
+                    </button>
+                    <button style="background-color: var(--light-bg); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;" id="applyFiltersBtn">
+                        <i class="fas fa-sliders-h"></i> Filters
+                    </button>
+                    <button style="background-color: var(--light-bg); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">
+                        <i class="fas fa-font"></i> Text
+                    </button>
+                </div>
+                <button style="background-color: var(--primary-green); color: white; border: none; padding: 12px 40px; border-radius: 25px; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; margin: 0 auto;" id="openCameraBtn">
+                    <i class="fas fa-camera"></i> Open Camera
+                </button>
+            </div>
+        </div>
+
+        <!-- Activity Screen -->
+        <div class="screen" id="activityScreen">
+            <div class="activity-panel">
+                <h2 style="padding: 20px; font-size: 20px;">Notifications</h2>
+                <div id="activityList">
+                    <!-- Activity items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen" id="profileScreen">
+            <div class="profile-header">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Profile" class="profile-avatar">
+                <div style="flex: 1;">
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-count">42</div>
+                            <div class="stat-label">Posts</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-count">1.2K</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-count">340</div>
+                            <div class="stat-label">Following</div>
+                        </div>
+                    </div>
+                    <div class="profile-name">Rohan Sharma</div>
+                    <div class="profile-bio">Travel enthusiast | Photographer | Exploring Incredible India 🇮🇳</div>
+                    <div class="profile-actions">
+                        <button class="profile-btn edit-btn">Edit Profile</button>
+                        <button class="profile-btn share-btn">Share Profile</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-tabs">
+                <div class="profile-tab active" data-tab="posts">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <div class="profile-tab" data-tab="reels">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="profile-tab" data-tab="tagged">
+                    <i class="fas fa-user-tag"></i>
+                </div>
+            </div>
+            
+            <div class="profile-content">
+                <div class="tab-content active" id="postsTab">
+                    <div class="explore-grid">
+                        <!-- User posts will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="tab-content" id="reelsTab">
+                    <div class="reels-container">
+                        <!-- Reels will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="tab-content" id="taggedTab">
+                    <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                        <i class="fas fa-user-tag" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>No tagged photos yet</h3>
+                        <p>When people tag you in photos, they'll appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Overlay -->
+        <div class="camera-overlay" id="cameraOverlay">
+            <div class="camera-header">
+                <button class="camera-action-btn" id="closeCamera">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div style="font-weight: 600;">Camera</div>
+                <button class="camera-action-btn" id="flipCamera">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div class="camera-preview" id="cameraPreview">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
+                <img id="capturedImage" alt="Captured Image">
+                <div class="camera-status" id="cameraStatus">Camera is active</div>
+                <div id="flashEffect" style="display: none;"></div>
+                
+                <!-- AR Filter Elements (Hidden by default) -->
+                <div class="ar-filter-element dog-ears" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1998/1998678.png" alt="Dog Ears" style="width: 100%; height: 100%;">
+                </div>
+                <div class="ar-filter-element dog-nose" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1998/1998708.png" alt="Dog Nose" style="width: 100%; height: 100%;">
+                </div>
+                <div class="sparkles" style="display: none;"></div>
+                <div class="ar-filter-element heart-eyes" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2107/2107845.png" alt="Heart Eyes" style="width: 100%; height: 100%;">
+                </div>
+                <div class="ar-filter-element heart-eyes right" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2107/2107845.png" alt="Heart Eyes" style="width: 100%; height: 100%;">
+                </div>
+                <div class="rainbow-vomit" style="display: none;"></div>
+                <div class="ar-filter-element sunglasses" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2589/2589909.png" alt="Sunglasses" style="width: 100%; height: 100%;">
+                </div>
+                <div class="ar-filter-element crown" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2107/2107955.png" alt="Crown" style="width: 100%; height: 100%;">
+                </div>
+                <div class="ar-filter-element mustache" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2589/2589980.png" alt="Mustache" style="width: 100%; height: 100%;">
+                </div>
+                <div class="ar-filter-element indian-flag" style="display: none;">
+                    <div style="width: 100%; height: 33.33%; background: #FF9933;"></div>
+                    <div style="width: 100%; height: 33.33%; background: white; display: flex; justify-content: center; align-items: center;">
+                        <div style="width: 20px; height: 20px; background: #000080; border-radius: 50%;"></div>
+                    </div>
+                    <div style="width: 100%; height: 33.33%; background: #138808;"></div>
+                </div>
+                <div class="ar-filter-element diya" style="display: none;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Diya" style="width: 100%; height: 100%;">
+                </div>
+            </div>
+            
+            <!-- Camera Filter Buttons -->
+            <div class="camera-filter-buttons" id="cameraFilterButtons">
+                <!-- Filter buttons will be populated by JavaScript -->
+            </div>
+            
+            <div class="camera-controls">
+                <button class="camera-action-btn" id="galleryBtn">
+                    <i class="fas fa-images"></i>
+                </button>
+                <button class="capture-btn" id="captureBtn">
+                    <div class="capture-btn-inner"></div>
+                </button>
+                <button class="camera-action-btn" id="openFiltersFromCamera">
+                    <i class="fas fa-magic"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Snapchat Style Filters Overlay -->
+        <div class="filters-overlay" id="filtersOverlay">
+            <div class="filter-category-tabs" id="filterCategoryTabs">
+                <!-- Category tabs will be populated by JavaScript -->
+            </div>
+            <div class="filters-container" id="filtersContainer">
+                <!-- Filters will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Story Viewer Overlay -->
+        <div class="story-viewer" id="storyViewer">
+            <div class="story-progress" id="storyProgress">
+                <!-- Progress bars will be populated by JavaScript -->
+            </div>
+            <div class="story-header">
+                <div class="story-user-info">
+                    <img src="" alt="" class="story-viewer-img" id="storyViewerImg">
+                    <div>
+                        <div class="story-viewer-username" id="storyViewerUsername"></div>
+                        <div class="story-time" id="storyViewerTime"></div>
+                    </div>
+                </div>
+                <button class="camera-action-btn" id="closeStory">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="story-content">
+                <img src="" alt="" class="story-image" id="storyImage">
+            </div>
+            <div class="story-actions">
+                <input type="text" class="story-reply-input" placeholder="Send message...">
+                <button class="camera-action-btn">
+                    <i class="far fa-heart"></i>
+                </button>
+                <button class="camera-action-btn">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Panel -->
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <div class="chat-title">Messages</div>
+                <button class="close-chat" id="closeChat">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-list" id="chatList">
+                <!-- Chat list will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" data-screen="home">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="explore">
+                <i class="fas fa-search nav-icon"></i>
+                <span>Explore</span>
+            </a>
+            <div class="nav-item add-post-btn" id="addPostBtn">
+                <i class="fas fa-plus"></i>
+            </div>
+            <a href="#" class="nav-item" data-screen="activity">
+                <i class="far fa-heart nav-icon"></i>
+                <span>Activity</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="profile">
+                <i class="far fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // Enhanced Dummy Users Data with Close Friends
+        const dummyUsers = [
+            {
+                id: 1,
+                name: "Priya Patel",
+                username: "priya_travels",
+                gender: "female",
+                followers: "1.4k",
+                location: "Agra, India",
+                avatar: "https://images.unsplash.com/photo-1494790108755-2616b786d4d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: true,
+                hasStory: true,
+                storyTime: "2 hours ago"
+            },
+            {
+                id: 2,
+                name: "Rajesh Kumar",
+                username: "rajesh_explorer",
+                gender: "male",
+                followers: "2.1k",
+                location: "Varanasi, India",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: true,
+                hasStory: true,
+                storyTime: "5 hours ago"
+            },
+            {
+                id: 3,
+                name: "Ananya Singh",
+                username: "ananya_captures",
+                gender: "female",
+                followers: "3.7k",
+                location: "Jaipur, India",
+                avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: false,
+                hasStory: true,
+                storyTime: "1 day ago"
+            },
+            {
+                id: 4,
+                name: "Vikram Mehta",
+                username: "vikram_wanderer",
+                gender: "male",
+                followers: "890",
+                location: "Mumbai, India",
+                avatar: "https://images.unsplash.com/photo-1507591064344-4c6ce005-128b-97dc4e1fa209?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: false,
+                hasStory: false,
+                storyTime: ""
+            },
+            {
+                id: 5,
+                name: "Neha Gupta",
+                username: "neha_foodie",
+                gender: "female",
+                followers: "5.2k",
+                location: "Delhi, India",
+                avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: true,
+                hasStory: true,
+                storyTime: "3 hours ago"
+            },
+            {
+                id: 6,
+                name: "Arjun Reddy",
+                username: "arjun_adventures",
+                gender: "male",
+                followers: "1.8k",
+                location: "Goa, India",
+                avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+                isCloseFriend: false,
+                hasStory: true,
+                storyTime: "6 hours ago"
+            }
+        ];
+
+        // Story Images
+        const storyImages = [
+            "https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+            "https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+            "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+            "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+            "https://images.unsplash.com/photo-1559661178-6dac5c1f0530?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+        ];
+
+        // Posts Data
+        const posts = [
+            {
+                id: 1,
+                userId: 1,
+                image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80",
+                caption: "The magnificent Taj Mahal at sunrise. No words can describe its beauty! #TajMahal #Agra #India #Travel",
+                likes: 1247,
+                comments: 89,
+                time: "2 hours ago",
+                location: "Taj Mahal, Agra"
+            },
+            {
+                id: 2,
+                userId: 2,
+                image: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: "The spiritual heart of India. Varanasi ghats during evening aarti is a surreal experience. #Varanasi #GangaAarti #Spiritual #India",
+                likes: 892,
+                comments: 42,
+                time: "5 hours ago",
+                location: "Dashashwamedh Ghat, Varanasi"
+            },
+            {
+                id: 3,
+                userId: 3,
+                image: "https://images.unsplash.com/photo-1593693399740-7c5c2161e6d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: "The Palace of Winds! Hawa Mahal looks absolutely stunning in the golden hour. #HawaMahal #Jaipur #Rajasthan #Architecture",
+                likes: 1563,
+                comments: 112,
+                time: "1 day ago",
+                location: "Hawa Mahal, Jaipur"
+            },
+            {
+                id: 4,
+                userId: 4,
+                image: "https://images.unsplash.com/photo-1595599512946-1e6d8c87c7d6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: "Gateway of India standing tall against the Mumbai skyline. #GatewayOfIndia #Mumbai #Monument #History",
+                likes: 743,
+                comments: 31,
+                time: "2 days ago",
+                location: "Gateway of India, Mumbai"
+            },
+            {
+                id: 5,
+                userId: 5,
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1371&q=80",
+                caption: "Nothing beats authentic Indian street food! Pani Puri is life! #IndianFood #StreetFood #Foodie #Delhi",
+                likes: 2310,
+                comments: 187,
+                time: "3 days ago",
+                location: "Chandni Chowk, Delhi"
+            },
+            {
+                id: 6,
+                userId: 6,
+                image: "https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                caption: "The divine Ganga Aarti at Rishikesh. A moment of pure bliss and spirituality. #GangaAarti #Rishikesh #Spirituality #India",
+                likes: 1678,
+                comments: 94,
+                time: "4 days ago",
+                location: "Triveni Ghat, Rishikesh"
+            }
+        ];
+
+        // Popular in India Data
+        const popularItems = [
+            {
+                id: 1,
+                title: "Kerala Backwaters",
+                location: "Alappuzha, Kerala",
+                image: "https://images.unsplash.com/photo-1593693399740-7c5c2161e6d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 2,
+                title: "Golden Temple",
+                location: "Amritsar, Punjab",
+                image: "https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 3,
+                title: "Goan Beaches",
+                location: "North Goa",
+                image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+            },
+            {
+                id: 4,
+                title: "Ladakh Mountains",
+                location: "Leh, Ladakh",
+                image: "https://images.unsplash.com/photo-1559661178-6dac5c1f0530?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+            }
+        ];
+
+        // Chat Data
+        const chats = [
+            {
+                id: 1,
+                userId: 2,
+                message: "Hey, how was your trip to Varanasi?",
+                time: "10:30 AM",
+                unread: true
+            },
+            {
+                id: 2,
+                userId: 5,
+                message: "We should go food hunting this weekend!",
+                time: "Yesterday",
+                unread: false
+            },
+            {
+                id: 3,
+                userId: 3,
+                message: "Loved your Jaipur photos!",
+                time: "2 days ago",
+                unread: false
+            },
+            {
+                id: 4,
+                userId: 6,
+                message: "Let's plan a trip to Goa next month",
+                time: "3 days ago",
+                unread: true
+            }
+        ];
+
+        // Activity Data
+        const activities = [
+            {
+                id: 1,
+                userId: 2,
+                text: "liked your photo",
+                time: "5 min ago"
+            },
+            {
+                id: 2,
+                userId: 5,
+                text: "started following you",
+                time: "1 hour ago"
+            },
+            {
+                id: 3,
+                userId: 3,
+                text: "commented: 'Amazing shot!'",
+                time: "3 hours ago"
+            },
+            {
+                id: 4,
+                userId: 1,
+                text: "mentioned you in a comment",
+                time: "1 day ago"
+            },
+            {
+                id: 5,
+                userId: 4,
+                text: "liked your photo",
+                time: "2 days ago"
+            }
+        ];
+
+        // Reels Data
+        const reels = [
+            {
+                id: 1,
+                userId: 1,
+                video: "https://assets.mixkit.co/videos/preview/mixkit-woman-praying-at-a-hindu-temple-41759-large.mp4",
+                likes: "12K",
+                username: "priya_travels"
+            },
+            {
+                id: 2,
+                userId: 3,
+                video: "https://assets.mixkit.co/videos/preview/mixkit-railway-train-passing-through-an-indian-town-41676-large.mp4",
+                likes: "8.5K",
+                username: "ananya_captures"
+            },
+            {
+                id: 3,
+                userId: 5,
+                video: "https://assets.mixkit.co/videos/preview/mixkit-street-food-vendor-preparing-noodles-41754-large.mp4",
+                likes: "24K",
+                username: "neha_foodie"
+            },
+            {
+                id: 4,
+                userId: 6,
+                video: "https://assets.mixkit.co/videos/preview/mixkit-going-down-a-curved-section-of-a-water-slide-41567-large.mp4",
+                likes: "15K",
+                username: "arjun_adventures"
+            }
+        ];
+
+        // Snapchat-like Filters with Categories
+        const cameraFilters = [
+            // Category: Basic
+            {
+                category: "basic",
+                id: 1,
+                name: "Normal",
+                className: "filter-normal",
+                filterStyle: "none",
+                description: "No filter",
+                icon: "fas fa-ban",
+                hasAR: false
+            },
+            {
+                category: "basic",
+                id: 2,
+                name: "Clarendon",
+                className: "filter-clarendon",
+                filterStyle: "contrast(1.2) saturate(1.1) brightness(1.1)",
+                description: "Bright and high contrast",
+                icon: "fas fa-sun",
+                hasAR: false
+            },
+            {
+                category: "basic",
+                id: 3,
+                name: "Juno",
+                className: "filter-juno",
+                filterStyle: "sepia(0.3) contrast(1.1) brightness(1.1) saturate(1.3)",
+                description: "Warm and vintage",
+                icon: "fas fa-seedling",
+                hasAR: false
+            },
+            {
+                category: "basic",
+                id: 4,
+                name: "Lark",
+                className: "filter-lark",
+                filterStyle: "contrast(1.2) saturate(1.1) brightness(1.1) hue-rotate(-5deg)",
+                description: "Cool and vibrant",
+                icon: "fas fa-wind",
+                hasAR: false
+            },
+            
+            // Category: AR Filters (Snapchat Style)
+            {
+                category: "ar",
+                id: 5,
+                name: "Dog Face",
+                className: "filter-dog-face",
+                filterStyle: "brightness(1.05)",
+                description: "Cute dog ears and nose",
+                icon: "fas fa-dog",
+                hasAR: true,
+                arElements: ["dog-ears", "dog-nose"]
+            },
+            {
+                category: "ar",
+                id: 6,
+                name: "Heart Eyes",
+                className: "filter-heart-eyes",
+                filterStyle: "brightness(1.1) saturate(1.3)",
+                description: "Floating heart eyes",
+                icon: "fas fa-heart",
+                hasAR: true,
+                arElements: ["heart-eyes"]
+            },
+            {
+                category: "ar",
+                id: 7,
+                name: "Rainbow Vomit",
+                className: "filter-rainbow",
+                filterStyle: "hue-rotate(90deg) saturate(1.5)",
+                description: "Colorful rainbow effect",
+                icon: "fas fa-rainbow",
+                hasAR: true,
+                arElements: ["rainbow-vomit"]
+            },
+            {
+                category: "ar",
+                id: 8,
+                name: "Sunglasses",
+                className: "filter-normal",
+                filterStyle: "none",
+                description: "Cool sunglasses",
+                icon: "fas fa-glasses",
+                hasAR: true,
+                arElements: ["sunglasses"]
+            },
+            
+            // Category: Special Effects
+            {
+                category: "effects",
+                id: 9,
+                name: "Sparkles",
+                className: "filter-normal",
+                filterStyle: "brightness(1.2)",
+                description: "Magical sparkle effect",
+                icon: "fas fa-sparkles",
+                hasAR: true,
+                arElements: ["sparkles"]
+            },
+            {
+                category: "effects",
+                id: 10,
+                name: "Glitch",
+                className: "filter-glitch",
+                filterStyle: "contrast(1.5)",
+                description: "Digital glitch effect",
+                icon: "fas fa-bolt",
+                hasAR: false,
+                animation: "glitch"
+            },
+            {
+                category: "effects",
+                id: 11,
+                name: "Disco",
+                className: "filter-disco",
+                filterStyle: "saturate(2)",
+                description: "Disco party lights",
+                icon: "fas fa-music",
+                hasAR: false,
+                animation: "discoLights"
+            },
+            {
+                category: "effects",
+                id: 12,
+                name: "Pixelate",
+                className: "filter-pixelate",
+                filterStyle: "blur(0.5px) contrast(1.5)",
+                description: "Retro pixel effect",
+                icon: "fas fa-gamepad",
+                hasAR: false
+            },
+            
+            // Category: Indian Theme
+            {
+                category: "indian",
+                id: 13,
+                name: "Bollywood",
+                className: "filter-bollywood",
+                filterStyle: "brightness(1.2) saturate(1.5) contrast(1.1)",
+                description: "Bollywood glamour",
+                icon: "fas fa-film",
+                hasAR: false
+            },
+            {
+                category: "indian",
+                id: 14,
+                name: "Holi Colors",
+                className: "filter-holi",
+                filterStyle: "saturate(2)",
+                description: "Festival of colors",
+                icon: "fas fa-palette",
+                hasAR: false,
+                animation: "holiColors"
+            },
+            {
+                category: "indian",
+                id: 15,
+                name: "Indian Flag",
+                className: "filter-normal",
+                filterStyle: "none",
+                description: "Tiranga pride",
+                icon: "fas fa-flag",
+                hasAR: true,
+                arElements: ["indian-flag"]
+            },
+            {
+                category: "indian",
+                id: 16,
+                name: "Diya Glow",
+                className: "filter-vintage",
+                filterStyle: "sepia(0.7) contrast(1.1) brightness(0.9)",
+                description: "Festive diya light",
+                icon: "fas fa-fire",
+                hasAR: true,
+                arElements: ["diya"]
+            },
+            
+            // Category: Funny
+            {
+                category: "funny",
+                id: 17,
+                name: "Mustache",
+                className: "filter-normal",
+                filterStyle: "none",
+                description: "Classic mustache",
+                icon: "fas fa-user-tie",
+                hasAR: true,
+                arElements: ["mustache"]
+            },
+            {
+                category: "funny",
+                id: 18,
+                name: "Crown",
+                className: "filter-perpetua",
+                filterStyle: "contrast(1.1) brightness(1.1) saturate(1.1)",
+                description: "Royal crown",
+                icon: "fas fa-crown",
+                hasAR: true,
+                arElements: ["crown"]
+            },
+            {
+                category: "funny",
+                id: 19,
+                name: "Vintage",
+                className: "filter-vintage",
+                filterStyle: "sepia(0.7) contrast(1.1) brightness(0.9)",
+                description: "Old school vintage",
+                icon: "fas fa-camera-retro",
+                hasAR: false
+            },
+            {
+                category: "funny",
+                id: 20,
+                name: "Neon",
+                className: "filter-neon",
+                filterStyle: "brightness(1.3) contrast(1.5) saturate(2)",
+                description: "Neon glow effect",
+                icon: "fas fa-lightbulb",
+                hasAR: false
+            }
+        ];
+
+        // Filter Categories
+        const filterCategories = [
+            { id: "all", name: "All", icon: "fas fa-th" },
+            { id: "basic", name: "Basic", icon: "fas fa-sliders-h" },
+            { id: "ar", name: "AR", icon: "fas fa-vr-cardboard" },
+            { id: "effects", name: "Effects", icon: "fas fa-magic" },
+            { id: "indian", name: "Indian", icon: "fas fa-flag" },
+            { id: "funny", name: "Funny", icon: "fas fa-laugh" }
+        ];
+
+        // DOM Elements
+        const themeToggle = document.getElementById('themeToggle');
+        const chatBtn = document.getElementById('chatBtn');
+        const closeChat = document.getElementById('closeChat');
+        const chatPanel = document.getElementById('chatPanel');
+        const navItems = document.querySelectorAll('.nav-item');
+        const screens = document.querySelectorAll('.screen');
+        const storiesList = document.getElementById('storiesList');
+        const feedContainer = document.getElementById('feedContainer');
+        const popularGrid = document.getElementById('popularGrid');
+        const exploreGrid = document.getElementById('exploreGrid');
+        const chatList = document.getElementById('chatList');
+        const activityList = document.getElementById('activityList');
+        const profileTabs = document.querySelectorAll('.profile-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const filterTags = document.querySelectorAll('.filter-tag');
+        const searchContainer = document.getElementById('searchContainer');
+        const addPostBtn = document.getElementById('addPostBtn');
+        const cameraOverlay = document.getElementById('cameraOverlay');
+        const closeCamera = document.getElementById('closeCamera');
+        const captureBtn = document.getElementById('captureBtn');
+        const flipCamera = document.getElementById('flipCamera');
+        const filtersOverlay = document.getElementById('filtersOverlay');
+        const openFilters = document.getElementById('openFilters');
+        const closeFilters = document.getElementById('closeFilters');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const applyFilter = document.getElementById('applyFilter');
+        const filtersContainer = document.getElementById('filtersContainer');
+        const filterCategoryTabs = document.getElementById('filterCategoryTabs');
+        const storyViewer = document.getElementById('storyViewer');
+        const closeStory = document.getElementById('closeStory');
+        const storyProgress = document.getElementById('storyProgress');
+        const storyImage = document.getElementById('storyImage');
+        const storyViewerImg = document.getElementById('storyViewerImg');
+        const storyViewerUsername = document.getElementById('storyViewerUsername');
+        const storyViewerTime = document.getElementById('storyViewerTime');
+        const openCameraBtn = document.getElementById('openCameraBtn');
+        const cameraVideo = document.getElementById('cameraVideo');
+        const cameraCanvas = document.getElementById('cameraCanvas');
+        const capturedImage = document.getElementById('capturedImage');
+        const cameraStatus = document.getElementById('cameraStatus');
+        const flashEffect = document.getElementById('flashEffect');
+        const openFiltersFromCamera = document.getElementById('openFiltersFromCamera');
+        const galleryBtn = document.getElementById('galleryBtn');
+        const cameraFilterButtons = document.getElementById('cameraFilterButtons');
+
+        // State Variables
+        let currentFilter = 'normal';
+        let currentStoryIndex = 0;
+        let storyTimer = null;
+        let activeStories = [];
+        let cameraStream = null;
+        let isFrontCamera = true;
+        let isCaptured = false;
+        let selectedFilter = 'filter-normal';
+        let activeCategory = 'all';
+        let activeAnimation = null;
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', function() {
+            renderStories();
+            renderPosts();
+            renderPopularItems();
+            renderExploreGrid();
+            renderChatList();
+            renderActivityList();
+            renderProfilePosts();
+            renderReels();
+            renderFilterCategories();
+            renderFilters();
+            renderCameraFilterButtons();
+            
+            // Set initial active state
+            document.querySelector('.nav-item[data-screen="home"]').classList.add('active');
+            document.getElementById('homeScreen').classList.add('active');
+            
+            // Search container is initially hidden
+            searchContainer.classList.remove('active');
+            
+            // Add fade-in animation to posts
+            setTimeout(() => {
+                document.querySelectorAll('.post-card').forEach(card => {
+                    card.classList.add('fade-in');
+                });
+            }, 100);
+        });
+
+        // Theme Toggle
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            // Animate toggle circle
+            const toggleCircle = document.querySelector('.toggle-circle');
+            toggleCircle.style.transform = document.body.classList.contains('dark-mode') 
+                ? 'translateX(24px)' 
+                : 'translateX(3px)';
+                
+            // Add animation class
+            document.body.classList.add('fade-in');
+            setTimeout(() => {
+                document.body.classList.remove('fade-in');
+            }, 500);
+        });
+
+        // Chat Panel Toggle
+        chatBtn.addEventListener('click', function() {
+            chatPanel.classList.add('active');
+        });
+
+        closeChat.addEventListener('click', function() {
+            chatPanel.classList.remove('active');
+        });
+
+        // Navigation
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Skip the add post button for now (it's a div, not a link)
+                if (this.classList.contains('add-post-btn')) {
+                    // Handle add post button click
+                    setActiveScreen('add');
+                    return;
+                }
+                
+                const screenId = this.getAttribute('data-screen');
+                
+                // Update active nav item
+                navItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show selected screen
+                setActiveScreen(screenId);
+            });
+        });
+
+        // Add Post Button Click
+        addPostBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            setActiveScreen('add');
+            
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            // Note: There's no nav item for "add" screen, so we'll keep the current active
+        });
+
+        // Open Camera from Add Post Screen
+        openCameraBtn.addEventListener('click', function() {
+            openCamera();
+        });
+
+        // Camera Functions
+        async function openCamera() {
+            cameraOverlay.classList.add('active');
+            isCaptured = false;
+            capturedImage.style.display = 'none';
+            cameraVideo.style.display = 'block';
+            cameraStatus.textContent = 'Starting camera...';
+            
+            // Hide all AR elements
+            hideAllARElements();
+            
+            try {
+                // Stop existing stream if any
+                if (cameraStream) {
+                    cameraStream.getTracks().forEach(track => track.stop());
+                }
+                
+                // Mobile-friendly camera constraints
+                const constraints = {
+                    video: {
+                        facingMode: isFrontCamera ? 'user' : 'environment',
+                        width: { min: 640, ideal: 1280, max: 1920 },
+                        height: { min: 480, ideal: 720, max: 1080 },
+                        frameRate: { ideal: 30 }
+                    },
+                    audio: false
+                };
+                
+                // Try to get camera with fallback options
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+                } catch (err) {
+                    // Try with simpler constraints
+                    const simpleConstraints = {
+                        video: {
+                            facingMode: isFrontCamera ? 'user' : 'environment'
+                        },
+                        audio: false
+                    };
+                    cameraStream = await navigator.mediaDevices.getUserMedia(simpleConstraints);
+                }
+                
+                cameraVideo.srcObject = cameraStream;
+                cameraStatus.textContent = 'Camera is active';
+                
+                // Apply current filter
+                applyFilterToCamera();
+                
+                // Play the video
+                cameraVideo.onloadedmetadata = () => {
+                    cameraVideo.play();
+                };
+                
+            } catch (error) {
+                console.error('Camera Error:', error);
+                
+                // Mobile-specific error handling
+                let errorMessage = 'Camera access error';
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage = 'Camera permission denied. Please allow camera access in browser settings.';
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage = 'No camera found on your device.';
+                } else if (error.name === 'NotReadableError') {
+                    errorMessage = 'Camera is already in use by another application.';
+                } else if (error.name === 'OverconstrainedError') {
+                    errorMessage = 'Camera requirements cannot be met.';
+                } else if (error.name === 'SecurityError') {
+                    errorMessage = 'HTTPS connection is required for camera access.';
+                }
+                
+                cameraStatus.textContent = errorMessage;
+                
+                // Show fallback UI
+                showCameraFallbackUI();
+            }
+        }
+
+        function hideAllARElements() {
+            // Hide all AR filter elements
+            document.querySelectorAll('.ar-filter-element').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.querySelectorAll('.sparkles, .rainbow-vomit').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        function applyFilterToCamera() {
+            const filter = cameraFilters.find(f => f.className === selectedFilter);
+            if (filter) {
+                cameraVideo.style.filter = filter.filterStyle;
+                capturedImage.style.filter = filter.filterStyle;
+                
+                // Handle AR elements
+                hideAllARElements();
+                
+                if (filter.hasAR && filter.arElements) {
+                    filter.arElements.forEach(elementClass => {
+                        const element = document.querySelector(`.${elementClass}`);
+                        if (element) {
+                            element.style.display = 'block';
+                        }
+                    });
+                }
+                
+                // Handle animations
+                if (filter.animation) {
+                    if (activeAnimation) {
+                        cameraVideo.style.animation = '';
+                    }
+                    if (filter.animation === 'glitch') {
+                        cameraVideo.style.animation = 'glitch 0.5s infinite';
+                    } else if (filter.animation === 'discoLights') {
+                        cameraVideo.style.animation = 'discoLights 2s infinite';
+                    } else if (filter.animation === 'holiColors') {
+                        cameraVideo.style.animation = 'holiColors 3s infinite';
+                    }
+                    activeAnimation = filter.animation;
+                } else {
+                    cameraVideo.style.animation = '';
+                    activeAnimation = null;
+                }
+            }
+        }
+
+        function applyFilterToCapturedImage() {
+            const filter = cameraFilters.find(f => f.className === selectedFilter);
+            if (filter && capturedImage) {
+                capturedImage.style.filter = filter.filterStyle;
+                
+                // Handle animations for captured image
+                if (filter.animation) {
+                    if (filter.animation === 'glitch') {
+                        capturedImage.style.animation = 'glitch 0.5s infinite';
+                    } else if (filter.animation === 'discoLights') {
+                        capturedImage.style.animation = 'discoLights 2s infinite';
+                    } else if (filter.animation === 'holiColors') {
+                        capturedImage.style.animation = 'holiColors 3s infinite';
+                    }
+                } else {
+                    capturedImage.style.animation = '';
+                }
+            }
+        }
+
+        function showCameraFallbackUI() {
+            const cameraPreview = document.getElementById('cameraPreview');
+            cameraPreview.innerHTML = `
+                <div style="color: white; text-align: center; padding: 40px 20px;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 20px; color: #FF9933;"></i>
+                    <h3 style="margin-bottom: 15px;">Camera Not Available</h3>
+                    <p style="margin-bottom: 20px; font-size: 14px;">${cameraStatus.textContent}</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button onclick="openCamera()" style="background: #FF9933; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                        <button onclick="useMockCamera()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                            <i class="fas fa-image"></i> Use Mock Camera
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function useMockCamera() {
+            cameraVideo.style.display = 'none';
+            const cameraPreview = document.getElementById('cameraPreview');
+            cameraPreview.innerHTML = `
+                <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #FF9933, #138808); display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div style="text-align: center; color: white; z-index: 2;">
+                        <i class="fas fa-camera" style="font-size: 60px; margin-bottom: 20px;"></i>
+                        <h3>Mock Camera Active</h3>
+                        <p style="font-size: 12px; margin-top: 10px;">Click capture to simulate photo</p>
+                    </div>
+                    <!-- Mock AR elements for testing -->
+                    <div class="ar-filter-element dog-ears" style="display: ${selectedFilter === 'filter-dog-face' ? 'block' : 'none'};">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1998/1998678.png" alt="Dog Ears" style="width: 100%; height: 100%;">
+                    </div>
+                </div>
+            `;
+            cameraStatus.textContent = 'Using mock camera for demo';
+        }
+
+        closeCamera.addEventListener('click', function() {
+            // Stop camera stream
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            
+            // Clear animation
+            cameraVideo.style.animation = '';
+            activeAnimation = null;
+            
+            cameraOverlay.classList.remove('active');
+        });
+
+        captureBtn.addEventListener('click', function() {
+            capturePhoto();
+        });
+
+        flipCamera.addEventListener('click', function() {
+            // Toggle camera
+            isFrontCamera = !isFrontCamera;
+            
+            // Update status
+            cameraStatus.textContent = isFrontCamera ? 'Front camera' : 'Back camera';
+            
+            // Restart camera with new facing mode
+            openCamera();
+        });
+
+        function capturePhoto() {
+            if (!cameraStream || isCaptured) {
+                // If no camera or already captured, simulate capture
+                simulateCapture();
+                return;
+            }
+            
+            // Set canvas dimensions to match video
+            cameraCanvas.width = cameraVideo.videoWidth;
+            cameraCanvas.height = cameraVideo.videoHeight;
+            
+            // Draw video frame to canvas
+            const context = cameraCanvas.getContext('2d');
+            
+            // Flip horizontally for front camera
+            if (isFrontCamera) {
+                context.translate(cameraCanvas.width, 0);
+                context.scale(-1, 1);
+            }
+            
+            context.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+            
+            // Apply current filter to canvas
+            const filter = cameraFilters.find(f => f.className === selectedFilter);
+            if (filter && filter.filterStyle !== 'none') {
+                context.filter = filter.filterStyle;
+                context.drawImage(cameraCanvas, 0, 0);
+                context.filter = 'none';
+            }
+            
+            // Convert canvas to data URL
+            const imageData = cameraCanvas.toDataURL('image/png');
+            
+            // Show captured image
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+            cameraVideo.style.display = 'none';
+            isCaptured = true;
+            
+            // Apply filter to captured image
+            applyFilterToCapturedImage();
+            
+            // Show flash effect
+            showFlash();
+            
+            // Update status
+            cameraStatus.textContent = 'Photo captured!';
+            
+            // Add pulse animation to capture button
+            this.classList.add('pulse');
+            setTimeout(() => {
+                this.classList.remove('pulse');
+            }, 500);
+        }
+
+        function simulateCapture() {
+            // Show flash effect
+            showFlash();
+            
+            // Create a simulated image
+            capturedImage.src = 'https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80';
+            capturedImage.style.display = 'block';
+            cameraVideo.style.display = 'none';
+            isCaptured = true;
+            
+            // Apply filter to captured image
+            applyFilterToCapturedImage();
+            
+            // Update status
+            cameraStatus.textContent = 'Photo captured (simulated)';
+            
+            // Add pulse animation to capture button
+            captureBtn.classList.add('pulse');
+            setTimeout(() => {
+                captureBtn.classList.remove('pulse');
+            }, 500);
+        }
+
+        function showFlash() {
+            flashEffect.style.display = 'block';
+            flashEffect.classList.add('flash');
+            
+            setTimeout(() => {
+                flashEffect.style.display = 'none';
+                flashEffect.classList.remove('flash');
+            }, 500);
+        }
+
+        // Camera Filter Functions
+        function renderCameraFilterButtons() {
+            cameraFilterButtons.innerHTML = '';
+            
+            // Show popular filters in camera view
+            const popularFilters = cameraFilters.slice(0, 8);
+            
+            popularFilters.forEach(filter => {
+                const isActive = filter.className === selectedFilter;
+                cameraFilterButtons.innerHTML += `
+                    <button class="camera-filter-btn ${isActive ? 'active' : ''}" 
+                            data-filter="${filter.className}" 
+                            data-filter-style="${filter.filterStyle}"
+                            title="${filter.description}">
+                        <i class="${filter.icon}"></i>
+                        ${filter.name}
+                    </button>
+                `;
+            });
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('.camera-filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filterClassName = this.getAttribute('data-filter');
+                    selectedFilter = filterClassName;
+                    
+                    // Update active button
+                    document.querySelectorAll('.camera-filter-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Apply filter to camera
+                    applyFilterToCamera();
+                    
+                    // Show filter name in status
+                    const filterName = this.textContent;
+                    cameraStatus.textContent = `${filterName} filter`;
+                });
+            });
+        }
+
+        // Filter Categories
+        function renderFilterCategories() {
+            filterCategoryTabs.innerHTML = '';
+            
+            filterCategories.forEach(category => {
+                const isActive = category.id === activeCategory;
+                filterCategoryTabs.innerHTML += `
+                    <button class="filter-category-btn ${isActive ? 'active' : ''}" 
+                            data-category="${category.id}">
+                        <i class="${category.icon}"></i>
+                        ${category.name}
+                    </button>
+                `;
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.filter-category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const categoryId = this.getAttribute('data-category');
+                    activeCategory = categoryId;
+                    
+                    // Update active category
+                    document.querySelectorAll('.filter-category-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Render filters for this category
+                    renderFilters();
+                });
+            });
+        }
+
+        // Filter Functions
+        function renderFilters() {
+            filtersContainer.innerHTML = '';
+            
+            let filtersToShow = cameraFilters;
+            
+            if (activeCategory !== 'all') {
+                filtersToShow = cameraFilters.filter(filter => filter.category === activeCategory);
+            }
+            
+            filtersToShow.forEach(filter => {
+                const isActive = filter.className === selectedFilter;
+                filtersContainer.innerHTML += `
+                    <div class="filter-item" data-filter="${filter.className}" 
+                         data-filter-style="${filter.filterStyle}"
+                         data-has-ar="${filter.hasAR}"
+                         data-ar-elements="${filter.arElements ? filter.arElements.join(',') : ''}">
+                        <div class="filter-preview ${isActive ? 'active' : ''}">
+                            <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                                 alt="${filter.name}" 
+                                 style="filter: ${filter.filterStyle}">
+                            ${filter.hasAR ? '<div style="position: absolute; top: 5px; right: 5px; color: white; font-size: 10px; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 10px;">AR</div>' : ''}
+                        </div>
+                        <div class="filter-name">${filter.name}</div>
+                    </div>
+                `;
+            });
+            
+            // Add click events to filters
+            document.querySelectorAll('.filter-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const filterClassName = this.getAttribute('data-filter');
+                    const filterStyle = this.getAttribute('data-filter-style');
+                    const hasAR = this.getAttribute('data-has-ar') === 'true';
+                    const arElements = this.getAttribute('data-ar-elements');
+                    
+                    selectedFilter = filterClassName;
+                    
+                    // Update active filter
+                    document.querySelectorAll('.filter-preview').forEach(preview => {
+                        preview.classList.remove('active');
+                    });
+                    this.querySelector('.filter-preview').classList.add('active');
+                    
+                    // Update camera filter buttons
+                    document.querySelectorAll('.camera-filter-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-filter') === filterClassName) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    // Apply filter to camera if open
+                    if (cameraOverlay.classList.contains('active')) {
+                        cameraVideo.style.filter = filterStyle;
+                        capturedImage.style.filter = filterStyle;
+                        
+                        // Handle AR elements
+                        hideAllARElements();
+                        
+                        if (hasAR && arElements) {
+                            const elements = arElements.split(',');
+                            elements.forEach(elementClass => {
+                                const element = document.querySelector(`.${elementClass}`);
+                                if (element) {
+                                    element.style.display = 'block';
+                                }
+                            });
+                        }
+                        
+                        // Update status
+                        const filterName = this.querySelector('.filter-name').textContent;
+                        cameraStatus.textContent = `${filterName} filter applied`;
+                    }
+                    
+                    // Close filters overlay after selection
+                    setTimeout(() => {
+                        filtersOverlay.classList.remove('active');
+                    }, 500);
+                });
+            });
+        }
+
+        openFiltersFromCamera.addEventListener('click', function() {
+            filtersOverlay.classList.add('active');
+        });
+
+        // Close filters when clicking outside
+        document.addEventListener('click', function(e) {
+            if (filtersOverlay.classList.contains('active') && 
+                !e.target.closest('.filters-overlay') && 
+                !e.target.closest('#openFiltersFromCamera')) {
+                filtersOverlay.classList.remove('active');
+            }
+        });
+
+        galleryBtn.addEventListener('click', function() {
+            alert('In a real app, this would open your photo gallery');
+        });
+
+        // Profile Tabs
+        profileTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab
+                profileTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show selected tab content
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}Tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Filter Tags
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                filterTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Story Functions
+        closeStory.addEventListener('click', function() {
+            stopStoryTimer();
+            storyViewer.classList.remove('active');
+        });
+
+        // Render Functions
+        function renderStories() {
+            storiesList.innerHTML = '';
+            
+            // Add "Add Story" at the beginning
+            storiesList.innerHTML += `
+                <div class="story-item" id="addStoryBtn">
+                    <div class="story-circle default" style="background: #E6E6E6;">
+                        <div class="story-inner" style="display: flex; align-items: center; justify-content: center; background: var(--light-bg);">
+                            <i class="fas fa-plus" style="font-size: 20px; color: var(--text-tertiary);"></i>
+                        </div>
+                    </div>
+                    <div class="story-username">Your Story</div>
+                </div>
+            `;
+            
+            // Add user stories
+            dummyUsers.forEach(user => {
+                let storyClass = 'default';
+                if (user.isCloseFriend) {
+                    storyClass = 'close-friend';
+                } else {
+                    storyClass = user.gender === 'male' ? 'male' : 'female';
+                }
+                
+                // Add pulse animation for users with new stories
+                const hasNewStory = user.hasStory;
+                
+                storiesList.innerHTML += `
+                    <div class="story-item ${hasNewStory ? 'pulse' : ''}" data-user-id="${user.id}" data-has-story="${user.hasStory}">
+                        <div class="story-circle ${storyClass}">
+                            <div class="story-inner">
+                                <img src="${user.avatar}" alt="${user.name}" class="story-img">
+                            </div>
+                        </div>
+                        <div class="story-username">${user.username}</div>
+                    </div>
+                `;
+            });
+            
+            // Add click events to stories
+            document.querySelectorAll('.story-item[data-has-story="true"]').forEach(item => {
+                item.addEventListener('click', function() {
+                    const userId = parseInt(this.getAttribute('data-user-id'));
+                    openStory(userId);
+                });
+            });
+            
+            // Add story button click
+            document.getElementById('addStoryBtn').addEventListener('click', function() {
+                openCamera();
+            });
+        }
+
+        function renderPosts() {
+            feedContainer.innerHTML = '';
+            
+            posts.forEach(post => {
+                const user = dummyUsers.find(u => u.id === post.userId);
+                const isFollowing = Math.random() > 0.5;
+                const isLiked = Math.random() > 0.7;
+                const isSaved = Math.random() > 0.8;
+                
+                feedContainer.innerHTML += `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="${user.avatar}" alt="${user.name}" class="user-avatar">
+                                <div class="user-details">
+                                    <h3>${user.name} ${user.isCloseFriend ? '<span style="color: var(--close-friend); font-size: 12px;">⭐</span>' : ''}</h3>
+                                    <p>${post.location} • ${post.time}</p>
+                                </div>
+                            </div>
+                            <button class="follow-btn ${isFollowing ? 'following' : ''}">
+                                ${isFollowing ? 'Following' : 'Follow'}
+                            </button>
+                        </div>
+                        <img src="${post.image}" alt="Post" class="post-image">
+                        <div class="post-actions">
+                            <div class="action-buttons">
+                                <button class="action-btn like-btn ${isLiked ? 'liked' : ''}" data-post-id="${post.id}">
+                                    <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="far fa-comment"></i>
+                                </button>
+                                <button class="action-btn">
+                                    <i class="far fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <button class="action-btn save-btn ${isSaved ? 'saved' : ''}" data-post-id="${post.id}">
+                                <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
+                            </button>
+                        </div>
+                        <div class="post-details">
+                            <div class="post-stats">
+                                <span class="like-count">${formatNumber(post.likes)} likes</span>
+                                <span>${post.comments} comments</span>
+                            </div>
+                            <div class="post-caption">
+                                <strong>${user.username}</strong> ${post.caption}
+                            </div>
+                            <div class="post-time">${post.time}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Add like and save functionality
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post-id');
+                    const icon = this.querySelector('i');
+                    const isLiked = this.classList.contains('liked');
+                    
+                    if (isLiked) {
+                        this.classList.remove('liked');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                    } else {
+                        this.classList.add('liked');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = this.getAttribute('data-post-id');
+                    const icon = this.querySelector('i');
+                    const isSaved = this.classList.contains('saved');
+                    
+                    if (isSaved) {
+                        this.classList.remove('saved');
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                    } else {
+                        this.classList.add('saved');
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    }
+                });
+            });
+            
+            // Add follow functionality
+            document.querySelectorAll('.follow-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const isFollowing = this.classList.contains('following');
+                    
+                    if (isFollowing) {
+                        this.classList.remove('following');
+                        this.textContent = 'Follow';
+                    } else {
+                        this.classList.add('following');
+                        this.textContent = 'Following';
+                    }
+                });
+            });
+        }
+
+        function renderPopularItems() {
+            popularGrid.innerHTML = '';
+            
+            popularItems.forEach(item => {
+                popularGrid.innerHTML += `
+                    <div class="popular-card">
+                        <img src="${item.image}" alt="${item.title}" class="popular-img">
+                        <div class="popular-info">
+                            <div class="popular-title">${item.title}</div>
+                            <div class="popular-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${item.location}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderExploreGrid() {
+            exploreGrid.innerHTML = '';
+            
+            // Generate 9 random explore items
+            const exploreImages = [
+                'https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1548013146-72479768bada?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1559661178-6dac5c1f0530?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1593693399740-7c5c2161e6d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1595599512946-1e6d8c87c7d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+                'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+            ];
+            
+            exploreImages.forEach((image, index) => {
+                exploreGrid.innerHTML += `
+                    <div class="explore-item">
+                        <img src="${image}" alt="Explore ${index + 1}" class="explore-img">
+                    </div>
+                `;
+            });
+        }
+
+        function renderChatList() {
+            chatList.innerHTML = '';
+            
+            chats.forEach(chat => {
+                const user = dummyUsers.find(u => u.id === chat.userId);
+                const online = Math.random() > 0.5;
+                
+                chatList.innerHTML += `
+                    <div class="chat-item">
+                        <div style="position: relative;">
+                            <img src="${user.avatar}" alt="${user.name}" class="chat-avatar">
+                            ${online ? '<div class="online-indicator"></div>' : ''}
+                        </div>
+                        <div class="chat-info">
+                            <div class="chat-user">${user.name} ${user.isCloseFriend ? '<span style="color: var(--close-friend); font-size: 12px;">⭐</span>' : ''}</div>
+                            <div class="chat-preview">${chat.message}</div>
+                        </div>
+                        <div class="chat-time">${chat.time}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderActivityList() {
+            activityList.innerHTML = '';
+            
+            activities.forEach(activity => {
+                const user = dummyUsers.find(u => u.id === activity.userId);
+                
+                activityList.innerHTML += `
+                    <div class="activity-item">
+                        <img src="${user.avatar}" alt="${user.name}" class="activity-avatar">
+                        <div class="activity-text">
+                            <strong>${user.username}</strong> ${activity.text}
+                        </div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderProfilePosts() {
+            const profilePostsGrid = document.querySelector('#postsTab .explore-grid');
+            if (!profilePostsGrid) return;
+            
+            profilePostsGrid.innerHTML = '';
+            
+            // Show 6 posts for profile
+            for (let i = 0; i < 6; i++) {
+                const post = posts[i % posts.length];
+                profilePostsGrid.innerHTML += `
+                    <div class="explore-item">
+                        <img src="${post.image}" alt="Post ${i + 1}" class="explore-img">
+                    </div>
+                `;
+            }
+        }
+
+        function renderReels() {
+            const reelsContainer = document.querySelector('#reelsTab .reels-container');
+            if (!reelsContainer) return;
+            
+            reelsContainer.innerHTML = '';
+            
+            reels.forEach(reel => {
+                const user = dummyUsers.find(u => u.id === reel.userId);
+                
+                reelsContainer.innerHTML += `
+                    <div class="reel-card">
+                        <video class="reel-video" loop muted>
+                            <source src="${reel.video}" type="video/mp4">
+                        </video>
+                        <div class="reel-overlay">
+                            <div class="reel-username">@${reel.username}</div>
+                            <div>${reel.likes} likes</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Add click to play/pause functionality
+            document.querySelectorAll('.reel-video').forEach(video => {
+                video.addEventListener('click', function() {
+                    if (this.paused) {
+                        this.play();
+                    } else {
+                        this.pause();
+                    }
+                });
+            });
+        }
+
+        // Story Functions
+        function openStory(userId) {
+            const user = dummyUsers.find(u => u.id === userId);
+            if (!user || !user.hasStory) return;
+            
+            // Get users with stories
+            activeStories = dummyUsers.filter(u => u.hasStory);
+            currentStoryIndex = activeStories.findIndex(u => u.id === userId);
+            
+            // Update story viewer
+            storyViewerImg.src = user.avatar;
+            storyViewerUsername.textContent = user.username;
+            storyViewerTime.textContent = user.storyTime;
+            
+            // Set random story image
+            const randomStoryImage = storyImages[Math.floor(Math.random() * storyImages.length)];
+            storyImage.src = randomStoryImage;
+            
+            // Show story viewer
+            storyViewer.classList.add('active');
+            
+            // Create progress bars
+            renderStoryProgress();
+            
+            // Start timer
+            startStoryTimer();
+        }
+
+        function renderStoryProgress() {
+            storyProgress.innerHTML = '';
+            
+            activeStories.forEach((story, index) => {
+                storyProgress.innerHTML += `
+                    <div class="story-progress-bar">
+                        <div class="story-progress-fill" style="width: ${index === currentStoryIndex ? '0%' : '100%'}"></div>
+                    </div>
+                `;
+            });
+            
+            // Start animation for current story
+            if (activeStories.length > 0) {
+                const currentProgressBar = storyProgress.children[currentStoryIndex];
+                const progressFill = currentProgressBar.querySelector('.story-progress-fill');
+                progressFill.style.width = '100%';
+                progressFill.style.transition = 'width 5s linear';
+            }
+        }
+
+        function startStoryTimer() {
+            stopStoryTimer();
+            
+            storyTimer = setTimeout(() => {
+                nextStory();
+            }, 5000); // 5 seconds per story
+        }
+
+        function stopStoryTimer() {
+            if (storyTimer) {
+                clearTimeout(storyTimer);
+                storyTimer = null;
+            }
+        }
+
+        function nextStory() {
+            if (activeStories.length === 0) return;
+            
+            currentStoryIndex++;
+            if (currentStoryIndex >= activeStories.length) {
+                // Close story viewer when all stories are viewed
+                storyViewer.classList.remove('active');
+                return;
+            }
+            
+            const nextUser = activeStories[currentStoryIndex];
+            storyViewerImg.src = nextUser.avatar;
+            storyViewerUsername.textContent = nextUser.username;
+            storyViewerTime.textContent = nextUser.storyTime;
+            
+            // Set random story image
+            const randomStoryImage = storyImages[Math.floor(Math.random() * storyImages.length)];
+            storyImage.src = randomStoryImage;
+            
+            // Reset progress bars
+            renderStoryProgress();
+            
+            // Restart timer
+            startStoryTimer();
+        }
+
+        // Helper Functions
+        function setActiveScreen(screenId) {
+            // Hide all screens
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show selected screen
+            const activeScreen = document.getElementById(`${screenId}Screen`);
+            if (activeScreen) {
+                activeScreen.classList.add('active');
+            }
+            
+            // Show/hide search container based on screen
+            if (screenId === 'explore') {
+                searchContainer.classList.add('active');
+            } else {
+                searchContainer.classList.remove('active');
+            }
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'k';
+            }
+            return num.toString();
+        }
+
+        // Clean up camera stream when page is hidden
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+        });
+        
+        // Export functions for HTML buttons
+        window.openCamera = openCamera;
+        window.useMockCamera = useMockCamera;
+    </script>
+</body>
+</html>
